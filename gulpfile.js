@@ -2,11 +2,13 @@ var gulp = require("gulp");
 var uglify = require("gulp-uglify");
 var livereload = require("gulp-livereload");
 var minifyCSS = require("gulp-minify-css");
+var prefix = require("gulp-autoprefixer");
 
 // modifies styles
 gulp.task('styles', function() {
 	console.log("starting styles!");
 	gulp.src("public/css/styles.css")
+		.pipe(prefix())
 		.pipe(minifyCSS())
 		.pipe(gulp.dest("public/build/css/"));
 });

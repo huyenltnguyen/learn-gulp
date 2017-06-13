@@ -4,4 +4,9 @@ body {
 
 h1 {
 	color: #e2211d;
+	transition: color .5s ease;
+}
+
+h1:hover {
+	color: #333;
 }
