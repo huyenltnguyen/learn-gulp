@@ -6,11 +6,18 @@ var prefix = require("gulp-autoprefixer");
 var concatCSS = require("gulp-concat-css");
 var sass = require("gulp-sass");
 
+// handles gulp errors
+function handleErrors(error) {
+	console.log(error);
+	this.emit("end");
+}
+
 // modifies styles
 gulp.task('styles', function() {
 	console.log("starting styles!");
 	gulp.src("public/css/styles.scss")
 		.pipe(sass())
+		.on("error", handleErrors)
 		.pipe(prefix())
 		.pipe(minifyCSS())
 		.pipe(gulp.dest("public/build/css/"));
