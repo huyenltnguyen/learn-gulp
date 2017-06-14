@@ -1,1 +1,1 @@
-var name="John";console.log(name);
+var name="Jordan";console.log(name);

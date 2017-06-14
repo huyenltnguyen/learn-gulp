@@ -2,13 +2,10 @@ $primary-color: #eee;
 
 body {
 	background: $primary-color;
+	padding: 2rem;
+	text-align: center;
 }
 
 h1 {
-	color: #e2211d;
-	transition: color .5s ease;
-}
-
-h1:hover {
 	color: #333;
 }
