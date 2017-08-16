@@ -8,6 +8,7 @@ var sass = require("gulp-sass");
 var jshint = require("gulp-jshint");
 var jshintStylish = require("jshint-stylish");
 var concat = require("gulp-concat");
+var imagemin = require("gulp-imagemin");
 
 // handles gulp errors
 function handleErrors(error) {
@@ -15,10 +16,17 @@ function handleErrors(error) {
 	this.emit("end");
 }
 
+// optimize images
+gulp.task("imagemin", () =>
+    gulp.src("src/img/*")
+        .pipe(imagemin())
+        .pipe(gulp.dest("build/img"))
+);
+
 // copy all HTML files
-gulp.task('copyHtml', function(){
-  gulp.src('src/*.html')
-      .pipe(gulp.dest('build'));
+gulp.task("copyHtml", function(){
+  gulp.src("src/*.html")
+      .pipe(gulp.dest("build"));
 });
 
 // reload html files
@@ -84,6 +92,8 @@ gulp.task("watch", function() {
 
 	livereload.listen();
 
+	gulp.watch('src/img/*', ['imagemin']);
+
 	gulp.watch("src/*.html", ["copyHtml", "html:reload"]);
 
 	gulp.watch("src/js/**/*.js", ["scripts", "scripts:reload"]);
@@ -91,8 +101,6 @@ gulp.task("watch", function() {
 	gulp.watch("src/css/styles.scss", ["styles", "styles:reload"]);
 
 	gulp.watch("src/vendor/css/**/*.css", ["styles:vendor", "styles:vendor:reload"]);
-
-
 });
 
 // run all gulp tasks
