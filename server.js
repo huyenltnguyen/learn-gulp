@@ -6,7 +6,7 @@ var connect = require("connect");
 var serveStatic = require('serve-static');
 var app = connect();
 
-app.use(serveStatic(__dirname + "/public"));
+app.use(serveStatic(__dirname + "/src"));
 
 http.createServer(app).listen(3000, function() {
 	console.log("Server is live on port 3000");

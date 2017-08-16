@@ -15,41 +15,53 @@ function handleErrors(error) {
 	this.emit("end");
 }
 
+// copy all HTML files
+gulp.task('copyHtml', function(){
+  gulp.src('src/*.html')
+      .pipe(gulp.dest('build'));
+});
+
+// reload html files
+gulp.task("html:reload", function() {
+	gulp.src("src/*.html")
+		.pipe(livereload({auto:false}));
+});
+
 // modifies styles
 gulp.task('styles', function() {
 	console.log("starting styles!");
-	gulp.src("public/css/styles.scss")
+	gulp.src("src/css/styles.scss")
 		.pipe(sass())
 		.on("error", handleErrors)
 		.pipe(prefix())
 		.pipe(minifyCSS())
-		.pipe(gulp.dest("public/build/css/"));
+		.pipe(gulp.dest("build/css/"));
 });
 
 // reloads styles
 gulp.task("styles:reload", function() {
-	gulp.src("public/css/styles.scss")
+	gulp.src("src/css/styles.scss")
 		.pipe(livereload({auto:false}));
 });
 
 // modifies vendor styles
 gulp.task("styles:vendor", function() {
-	gulp.src("public/vendor/css/**/*.css")	// match any files inside public/vendor/css that are inside of any folders (**) that have the .css extension
+	gulp.src("src/vendor/css/**/*.css")	// match any files inside src/vendor/css that are inside of any folders (**) that have the .css extension
 		.pipe(concatCSS("vendor.min.css"))
 		.pipe(minifyCSS())
-		.pipe(gulp.dest("public/build/css/"));
+		.pipe(gulp.dest("build/css/"));
 });
 
 // reloads vendor styles
 gulp.task("styles:vendor:reload", function() {
-	gulp.src("public/vendor/css/**/*.css")
+	gulp.src("src/vendor/css/**/*.css")
 		.pipe(livereload({auto:false}));
 });
 
 // modifies scripts
 gulp.task('scripts', function() {
 	console.log("starting scripts");
-	gulp.src("public/js/**/*.js")
+	gulp.src("src/js/**/*.js")
 		.pipe(jshint())
 		.pipe(jshint.reporter(jshintStylish))
 		.pipe(jshint.reporter("fail"))
@@ -58,27 +70,29 @@ gulp.task('scripts', function() {
 		})
 		.pipe(concat("scripts.min.js"))
 		.pipe(uglify())
-		.pipe(gulp.dest("public/build/js/"));
+		.pipe(gulp.dest("build/js/"));
 });
 
 // reloads scripts
 gulp.task("scripts:reload", function() {
-	gulp.src("public/js/main.js")
+	gulp.src("src/js/main.js")
 		.pipe(livereload({auto:false}));
 });
 
 // watches files
 gulp.task("watch", function() {
+
 	livereload.listen();
 
-	gulp.watch("public/js/**/*.js", ["scripts", "scripts:reload"]);
+	gulp.watch("src/*.html", ["copyHtml", "html:reload"]);
 
-	gulp.watch("public/index.html")
-		.on("change", livereload.changed);
+	gulp.watch("src/js/**/*.js", ["scripts", "scripts:reload"]);
 
-	gulp.watch("public/css/styles.scss", ["styles", "styles:reload"]);
+	gulp.watch("src/css/styles.scss", ["styles", "styles:reload"]);
 
-	gulp.watch("public/vendor/css/**/*.css", ["styles:vendor", "styles:vendor:reload"]);		
+	gulp.watch("src/vendor/css/**/*.css", ["styles:vendor", "styles:vendor:reload"]);
+
+
 });
 
 // run all gulp tasks
